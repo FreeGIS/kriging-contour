@@ -34,7 +34,7 @@ clip_feature: 切割范围，geojson格式的面要素，可选参数
 ​		示例代码：
 ```
 	//计算克里金等值面
-		let kriging_contours=kriging-contour.getVectorContourr(dataset,'level',{
+		let kriging_contours=kriging.getVectorContourr(dataset,'level',{
 			model:'exponential',
 			sigma2:0,
 			alpha:100
@@ -55,7 +55,7 @@ colors：渲染颜色分级。
 示例代码：
 ```
 	//计算克里金等值面
-		kriging-contour.drawCanvasContour(dataset,'level',{
+		kriging.drawCanvasContour(dataset,'level',{
 			model:'exponential',
 			sigma2:0,
 			alpha:100
