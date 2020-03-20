@@ -70,6 +70,6 @@ kriging是基于oeo4b的[kriging.js](https://github.com/oeo4b/kriging.js)修改�
 本次修改修复部分编码不可读部分，且重新实现生成基于矢量的插值等值面，渲染效果较好。
 
 kriging.js渲染效果:
-![kriging图片渲染效果](https://github.com/FreeGIS/kriging/blob/master/doc/raster.jpg)
+![kriging图片渲染效果](https://github.com/FreeGIS/kriging-contour/blob/master/doc/raster.jpg)
 kriging-contour渲染效果:
-![kriging矢量渲染效果](https://github.com/FreeGIS/kriging/blob/master/doc/vector.jpg)
+![kriging矢量渲染效果](https://github.com/FreeGIS/kriging-contour/blob/master/doc/vector.jpg)
