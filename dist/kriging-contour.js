@@ -1,4 +1,4 @@
-// kriging-contour v1.0.0 Copyright 2020 freegis
+// kriging-contour v1.0.1 Copyright 2020 freegis
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -4492,7 +4492,10 @@ function getVectorContour(featureCollection,weight,krigingParams,breaks,clip_fea
      //是否需要切割
      if(clip_feature){
         let clip_features=vectorContour.features.map(feature=>{
-            return intersect(feature,clip_feature);
+			let _feature=intersect(feature,clip_feature);
+			//补全切割要素属性信息
+			_feature.properties=feature.properties;
+            return _feature;
         });
         vectorContour.features=clip_features;
     }
