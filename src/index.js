@@ -42,11 +42,14 @@ function getVectorContour(featureCollection,weight,krigingParams,breaks,clip_fea
     let vectorContour=kriging.getVectorContour(gridinfo,breaks);
      //是否需要切割
      if(clip_feature){
-        let clip_features=vectorContour.features.map(feature=>{
+		let clip_features=[];
+        vectorContour.features.forEach(feature=>{
 			let _feature=intersect(feature,clip_feature);
 			//补全切割要素属性信息
-			_feature.properties=feature.properties;
-            return _feature;
+			if(_feature){
+				_feature.properties=feature.properties;
+				clip_features.push(_feature);
+			}
         });
         vectorContour.features=clip_features;
     }
