@@ -22,14 +22,13 @@ npm install kriging-contour --save
 ## 使用说明
 ​	**矢量等值面**
 
-kriging-contour.getVectorContour(dataset,weight_field,kriging_params,weight_breaks,clip_feature);
+kriging-contour.getVectorContour(dataset,weight_field,kriging_params,weight_breaks);
 
 ```
 dataset：geojson格式的featureclass数据集，feature是图形是点，必填
 weight_field：绑定权重字段名称，必填
 kriging_params：克里金插值参数，必填
 weight_breaks：权重生成等值面分级数组，必填
-clip_feature: 切割范围，geojson格式的面要素，可选参数
 ```
 ​		示例代码：
 ```
@@ -42,7 +41,7 @@ clip_feature: 切割范围，geojson格式的面要素，可选参数
 ```
 ​	**图片等值面**
 
-kriging-contour.drawCanvasContour(dataset,weight_field,kriging_params,weight_breaks,clip_feature);
+kriging-contour.drawCanvasContour(dataset,weight_field,kriging_params,weight_breaks);
 ```
 dataset：geojson格式的featureclass数据集，feature是图形是点，必填
 weight_field：绑定权重字段名称，必填

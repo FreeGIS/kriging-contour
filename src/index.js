@@ -1,5 +1,4 @@
 import {kriging} from './kriging';
-import intersect from '@turf/intersect';
 
 function _getKrigingGridInfo(featureCollection,weight,krigingParams){
     //先获取featureCollection的bbox
@@ -24,6 +23,7 @@ function _getKrigingGridInfo(featureCollection,weight,krigingParams){
     return gridinfo;
 }
 
+  
 /*
 * 克里金生成矢量等值面，浏览器和node都可以使用
 * @param {json} featureCollection：必填，已有点数据，geojson格式
@@ -35,24 +35,10 @@ function _getKrigingGridInfo(featureCollection,weight,krigingParams){
          krigingAlpha:
     }
 * @param {array} breaks：必填，等值面分级区间
-* @param {json) clip_feature：可选，切割面要素的geojson格式
 */
-function getVectorContour(featureCollection,weight,krigingParams,breaks,clip_feature){
+function getVectorContour(featureCollection,weight,krigingParams,breaks){
     let gridinfo=_getKrigingGridInfo(featureCollection,weight,krigingParams);
     let vectorContour=kriging.getVectorContour(gridinfo,breaks);
-     //是否需要切割
-     if(clip_feature){
-		let clip_features=[];
-        vectorContour.features.forEach(feature=>{
-			let _feature=intersect(feature,clip_feature);
-			//补全切割要素属性信息
-			if(_feature){
-				_feature.properties=feature.properties;
-				clip_features.push(_feature);
-			}
-        });
-        vectorContour.features=clip_features;
-    }
     return vectorContour;
 };
 
@@ -73,4 +59,10 @@ function drawCanvasContour(featureCollection,weight,krigingParams,canvas,xlim,yl
 	let gridinfo=_getKrigingGridInfo(featureCollection,weight,krigingParams);
     kriging.drawCanvasContour(gridinfo,canvas,xlim,ylim,colors);
 };
+
+
+
+
+
+
 export {getVectorContour,drawCanvasContour};
