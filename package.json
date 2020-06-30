@@ -1,6 +1,6 @@
 {
   "name": "kriging-contour",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "freegis",
   "description": "基于克里金插值算法，根据离散点位置及其权重，生成等值面矢量数据(GeoJSON格式)和栅格数据(Canvas绘制图片)，这些数据在任何WebGIS客户端上都可通用展示。",
   "scripts": {
@@ -28,5 +28,7 @@
   "bugs": {
     "url": "https://github.com/freegis/kriging-contour/issues"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "main": "dist/kriging-contour.js",
+  "module": "src/index.js"
 }
