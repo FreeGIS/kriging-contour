@@ -498,34 +498,68 @@ kriging.getVectorContour = function (gridInfo, breaks) {
 		"type" : "FeatureCollection",
 		"features" : []
 	};
-	var geoX_width=gridInfo.xlim[1]-gridInfo.xlim[0];
-	var geoY_width=gridInfo.ylim[1]-gridInfo.ylim[0];
-	_contours.forEach(contour => {
+	for(let i=0;i<_contours.length;i++){
+		const contour = _contours[i];
+		if(contour.type==='MultiPolygon'){
 			contour.coordinates.forEach(polygon => {
-						//polygon分内环和外环
-						let _polygon = polygon.map(ring => {
-									let _ring = ring.map(function (coor) {
-										//像素坐标转地理坐标
-										let lon = gridInfo.xlim[0] + geoX_width * (coor[0]*1.0 / gridInfo.n);
-										let lat = gridInfo.ylim[0] + geoY_width * (coor[1]*1.0 / gridInfo.m);
-										return [lon,lat];
-									});
-									return _ring;
-								});
-						dataset.features.push({
-							"type" : "Feature",
-							"properties" : {
-								"contour_value" : contour.value
-							},
-							"geometry" : {
-								"type" : "Polygon",
-								"coordinates" : _polygon
-							}
-						});
+				let geom = {
+					"type" : "Polygon",
+					"coordinates" : []
+				};
+				//坐标转换，图形为空去除
+				geom.coordinates=polygon_pixel2geos(polygon,gridInfo);
+				if(geom.coordinates.length>0){
+					dataset.features.push({
+						"type" : "Feature",
+						"properties" : {
+							"value" : contour.value
+						},
+						"geometry" :geom
+					});
+				}
 			});
-		});
+		}
+		else if(contour.type==='Polygon'){
+			let geom = {
+				"type" : "Polygon",
+				"coordinates" : []
+			};
+			//坐标转换，图形为空去除
+			geom.coordinates=polygon_pixel2geos(contour.coordinates,gridInfo);
+			if(geom.coordinates.length>0){
+				dataset.features.push({
+					"type" : "Feature",
+					"properties" : {
+						"value" : contour.value
+					},
+					"geometry" :geom
+				});
+			}
+		}
+	}
 	return dataset;
 };
+//像素坐标转地理坐标
+function polygon_pixel2geos(polygon,gridInfo){
+	//polygon分内环和外环
+	const _polygon = polygon.map((ring) => {
+		const _ring = ring.map(function (coor) {
+			//像素坐标转地理坐标 ，像素坐标y方向从上到下递增，纬度是y从上到下递减
+			const lon = gridInfo.xlim[0] + coor[0]*gridInfo.x_resolution;
+			let lat;
+			//格网自上向下走
+			if(gridInfo.y_resolution<0)
+				lat=gridInfo.ylim[1] + coor[1]*gridInfo.y_resolution;
+			//格网自下向上走
+			else
+				lat=gridInfo.ylim[0] + coor[1]*gridInfo.y_resolution;
+	
+			return [lon,lat];
+		});
+		return _ring;
+	});	
+	return _polygon;
+}
 //克里金生成canvas图像
  kriging.drawCanvasContour = function(gridInfo,canvas,xlim,ylim,colors) {
 	//清空画布

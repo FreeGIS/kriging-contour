@@ -1,34 +1,27 @@
-import * as meta from "./package.json";
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve';
-import {terser} from "rollup-plugin-terser";
-const config = {
-  input: "src/index.js",
-  output: {
-    file: `dist/${meta.name}.js`,
-    name: "kriging",
-    format: "umd",
-    indent: false,
-    extend: true,
-    banner: `// ${meta.name} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author}`
-  },
-  plugins: [resolve(),commonjs()]
-};
-export default [
-  config,
-  {
-    ...config,
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
+import babel from 'rollup-plugin-babel';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+import {terser} from 'rollup-plugin-terser';
+
+export default {
+    input: 'src/index.js',
     output: {
-      ...config.output,
-      file: `dist/${meta.name}.min.js`
+      name: 'kriging-contour',
+      file: 'dist/kriging-contour.js',
+      format: 'umd',
+      sourcemap: true
     },
-    plugins: [
-      ...config.plugins,
-      terser({
-        output: {
-          preamble: config.output.banner
-        }
-      })
+    treeshake: true,
+    plugins: [ 
+      json(),
+      resolve(),
+      commonjs(),
+      sourcemaps(),
+      babel({
+        exclude: 'node_modules/**' // 只编译我们的源代码
+      }),
+      terser()
     ]
-  }
-];
+  };
